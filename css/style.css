@@ -1,0 +1,188 @@
+/* =========================
+   SOMNIO GLOBAL STYLE
+========================= */
+
+body{
+    background:#f5f7fb;
+    font-family:'Segoe UI',sans-serif;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    min-height:100vh;
+    background:#ffffff;
+    border-right:1px solid #e5e7eb;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    padding:20px;
+    border-bottom:1px solid #eee;
+}
+
+.sidebar .nav-link{
+    color:#444;
+    padding:12px 18px;
+    margin:5px 10px;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.sidebar .nav-link:hover{
+    background:#eef4ff;
+}
+
+.sidebar .active{
+    background:#0d6efd;
+    color:white !important;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.card-box,
+.stat-card,
+.panel{
+
+    background:white;
+    border:none;
+
+    border-radius:15px;
+
+    box-shadow:
+    0 3px 15px
+    rgba(0,0,0,.08);
+
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar{
+
+    background:white;
+
+    border-bottom:
+    1px solid #ddd;
+
+    padding:15px 25px;
+
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.btn-primary{
+
+    border-radius:10px;
+
+}
+
+.btn-outline-primary{
+
+    border-radius:10px;
+
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-control,
+.form-select{
+
+    border-radius:10px;
+
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table{
+
+    vertical-align:middle;
+
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.badge-box{
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-card{
+
+    width:450px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    box-shadow:
+    0 10px 25px
+    rgba(0,0,0,.08);
+
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero-image{
+
+    border-radius:20px;
+
+}
+
+.feature-card{
+
+    transition:.3s;
+
+}
+
+.feature-card:hover{
+
+    transform:
+    translateY(-5px);
+
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+.sidebar{
+
+    min-height:auto;
+
+}
+
+.logo{
+
+    text-align:center;
+
+}
+
+}

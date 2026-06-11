@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Riwayat Tidur - Somnio</title>
+<link rel="stylesheet" href="css/style.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+    background:#f5f7fb;
+}
+
+.sidebar{
+    min-height:100vh;
+    background:white;
+    border-right:1px solid #ddd;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    padding:20px;
+    border-bottom:1px solid #eee;
+}
+
+.sidebar .nav-link{
+    color:#444;
+    padding:12px 18px;
+    margin:5px 10px;
+    border-radius:10px;
+}
+
+.sidebar .active{
+    background:#0d6efd;
+    color:white !important;
+}
+
+.card-box{
+    background:white;
+    border:none;
+    border-radius:15px;
+    box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+<div class="row">
+
+<!-- SIDEBAR -->
+
+<div class="col-lg-2 sidebar p-0">
+
+<div class="logo">
+🌙 SOMNIO
+</div>
+
+<ul class="nav flex-column mt-3">
+
+<li>
+<a class="nav-link" href="dashboard.html">
+🏠 Dashboard
+</a>
+</li>
+
+<li>
+<a class="nav-link" href="sleep-form.html">
+📝 Input Data
+</a>
+</li>
+
+<li>
+<a class="nav-link active" href="history.html">
+📖 Riwayat Tidur
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="statistics.html">
+📊 Statistik
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="reminder.html">
+🔔 Pengingat
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="tips.html">
+💡 Tips
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="settings.html">
+⚙ Pengaturan
+</a>
+</li>
+
+</ul>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="col-lg-10 p-4">
+
+<h3 class="mb-4">
+Riwayat Tidur
+</h3>
+
+<div class="card card-box p-4">
+
+<table class="table table-striped">
+
+<thead>
+
+<tr>
+
+<th>Tanggal</th>
+<th>Jam Tidur</th>
+<th>Jam Bangun</th>
+<th>Kualitas</th>
+<th>Aksi</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tableBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- MODAL -->
+
+<div
+class="modal fade"
+id="detailModal"
+tabindex="-1">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h5 class="modal-title">
+Detail Tidur
+</h5>
+
+<button
+class="btn-close"
+data-bs-dismiss="modal">
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<p>
+<b>Tanggal:</b>
+<span id="mTanggal"></span>
+</p>
+
+<p>
+<b>Jam Tidur:</b>
+<span id="mJamTidur"></span>
+</p>
+
+<p>
+<b>Jam Bangun:</b>
+<span id="mJamBangun"></span>
+</p>
+
+<p>
+<b>Kualitas:</b>
+<span id="mKualitas"></span>
+%
+</p>
+
+<p>
+<b>Catatan:</b>
+<span id="mCatatan"></span>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+const user =
+localStorage.getItem("somnioUser");
+
+let dataTidur =
+JSON.parse(
+localStorage.getItem(`sleepData_${user}`)
+) || [];
+
+const tbody =
+document.getElementById("tableBody");
+
+function tampilkanData(){
+
+tbody.innerHTML = "";
+
+dataTidur.forEach((item,index)=>{
+
+tbody.innerHTML += `
+
+<tr>
+
+<td>${item.tanggal}</td>
+
+<td>${item.jamTidur}</td>
+
+<td>${item.jamBangun}</td>
+
+<td>${item.kualitas}%</td>
+
+<td>
+
+<button
+class="btn btn-primary btn-sm"
+onclick="lihatData(${index})">
+
+Lihat
+
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+onclick="hapusData(${index})">
+
+Hapus
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+function lihatData(index){
+
+const item = dataTidur[index];
+
+document.getElementById("mTanggal")
+.innerHTML = item.tanggal;
+
+document.getElementById("mJamTidur")
+.innerHTML = item.jamTidur;
+
+document.getElementById("mJamBangun")
+.innerHTML = item.jamBangun;
+
+document.getElementById("mKualitas")
+.innerHTML = item.kualitas;
+
+document.getElementById("mCatatan")
+.innerHTML = item.catatan;
+
+new bootstrap.Modal(
+document.getElementById("detailModal")
+).show();
+
+}
+
+function hapusData(index){
+
+if(confirm("Hapus data ini?")){
+
+dataTidur.splice(index,1);
+
+localStorage.setItem(
+`sleepData_${user}`,
+JSON.stringify(dataTidur)
+);
+
+tampilkanData();
+
+}
+
+}
+
+tampilkanData();
+
+</script>
+<script src="js/script.js"></script>
+
+</body>
+</html>

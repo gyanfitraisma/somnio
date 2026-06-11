@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Statistik Tidur - Somnio</title>
+<link rel="stylesheet" href="css/style.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+    background:#f5f7fb;
+}
+
+.sidebar{
+    min-height:100vh;
+    background:white;
+    border-right:1px solid #ddd;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    padding:20px;
+    border-bottom:1px solid #eee;
+}
+
+.sidebar .nav-link{
+    color:#444;
+    padding:12px 18px;
+    margin:5px 10px;
+    border-radius:10px;
+}
+
+.sidebar .active{
+    background:#0d6efd;
+    color:white !important;
+}
+
+.card-box{
+    background:white;
+    border:none;
+    border-radius:15px;
+    box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+<div class="row">
+
+<!-- SIDEBAR -->
+
+<div class="col-lg-2 sidebar p-0">
+
+<div class="logo">
+🌙 SOMNIO
+</div>
+
+<ul class="nav flex-column mt-3">
+
+<li>
+<a class="nav-link" href="dashboard.html">
+🏠 Dashboard
+</a>
+</li>
+
+<li>
+<a class="nav-link" href="sleep-form.html">
+📝 Input Data
+</a>
+</li>
+
+<li>
+<a class="nav-link" href="history.html">
+📖 Riwayat Tidur
+</a>
+</li>
+
+<li>
+<a class="nav-link active" href="statistics.html">
+📊 Statistik
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="reminder.html">
+🔔 Pengingat
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="tips.html">
+💡 Tips
+</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="settings.html">
+⚙ Pengaturan
+</a>
+</li>
+
+</ul>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="col-lg-10 p-4">
+
+<h3 class="mb-4">
+Statistik Tidur
+</h3>
+
+<div class="row g-4">
+
+<div class="col-md-4">
+
+<div class="card card-box p-4">
+
+<h6>Total Data Tidur</h6>
+
+<h2 id="totalData">
+0
+</h2>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card card-box p-4">
+
+<h6>Rata-rata Kualitas</h6>
+
+<h2 id="avgQuality">
+0%
+</h2>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="card card-box p-4">
+
+<h6>Rata-rata Durasi</h6>
+
+<h2 id="avgDuration">
+0 Jam
+</h2>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card card-box p-4 mt-4">
+
+<h5 class="mb-4">
+Grafik Kualitas Tidur
+</h5>
+
+<canvas id="statsChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const user =
+localStorage.getItem("somnioUser");
+
+const sleepData =
+JSON.parse(
+localStorage.getItem(`sleepData_${user}`)
+) || [];
+
+document.getElementById("totalData")
+.innerHTML = sleepData.length;
+
+let totalQuality = 0;
+
+sleepData.forEach(item => {
+
+totalQuality +=
+Number(item.kualitas);
+
+});
+
+let avgQuality = 0;
+
+if(sleepData.length > 0){
+
+avgQuality =
+(
+totalQuality /
+sleepData.length
+).toFixed(1);
+
+}
+
+document.getElementById("avgQuality")
+.innerHTML =
+avgQuality + "%";
+
+/* HITUNG DURASI */
+
+let totalMinutes = 0;
+
+sleepData.forEach(item => {
+
+const tidur =
+item.jamTidur.split(":");
+
+const bangun =
+item.jamBangun.split(":");
+
+let start =
+(Number(tidur[0]) * 60)
++
+Number(tidur[1]);
+
+let end =
+(Number(bangun[0]) * 60)
++
+Number(bangun[1]);
+
+if(end < start){
+
+end += 24 * 60;
+
+}
+
+totalMinutes +=
+(end - start);
+
+});
+
+let avgMinutes = 0;
+
+if(sleepData.length > 0){
+
+avgMinutes =
+Math.round(
+totalMinutes /
+sleepData.length
+);
+
+}
+
+document.getElementById("avgDuration")
+.innerHTML =
+(avgMinutes/60).toFixed(1)
++
+" Jam";
+
+/* GRAFIK */
+
+const labels =
+sleepData.map(
+item => item.tanggal
+);
+
+const kualitas =
+sleepData.map(
+item => item.kualitas
+);
+
+const ctx =
+document.getElementById("statsChart");
+
+if(sleepData.length === 0){
+
+ctx.parentElement.innerHTML +=
+`
+<div class="alert alert-warning mt-3">
+Belum ada data tidur.
+</div>
+`;
+
+}else{
+
+new Chart(ctx, {
+
+type:'bar',
+
+data:{
+
+labels:labels,
+
+datasets:[{
+
+label:'Kualitas Tidur (%)',
+
+data:kualitas,
+
+borderWidth:1
+
+}]
+
+},
+
+options:{
+responsive:true
+}
+
+});
+
+}
+
+</script>
+<script src="js/script.js"></script>
+
+</body>
+</html>
