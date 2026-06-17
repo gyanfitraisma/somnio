@@ -303,31 +303,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Pastikan event listener form submit terpasang dengan aman
     const formTidur = document.getElementById("sleepForm");
-    if(formTidur) {
+    if (formTidur) {
         formTidur.addEventListener("submit", simpanDataTidur);
     }
 
-const user =
-localStorage.getItem("somnioUser");
+    const user = localStorage.getItem("somnioUser");
+    const reminder = JSON.parse(localStorage.getItem(`reminder_${user}`));
 
-const reminder =
-JSON.parse(
-localStorage.getItem(
-`reminder_${user}`
-)
-);
-
-if(reminder){
-
-    const reminderElement =
-    document.getElementById(
-    "dashboardReminderTime"
-    );
-
-    if(reminderElement){
-        reminderElement.innerHTML =
-        reminder.sleepTime;
+    if (reminder) {
+        const reminderElement = document.getElementById("dashboardReminderTime");
+        if (reminderElement) {
+            reminderElement.innerHTML = reminder.sleepTime;
+        }
     }
-
-}
 });
