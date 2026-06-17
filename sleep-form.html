@@ -84,11 +84,11 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Jam Mulai Tidur</label>
-                                <input type="time" id="jamTidur" class="form-control" required>
+                                <input type="time" id="jamTidur" class="form-control" step="60" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Jam Bangun</label>
-                                <input type="time" id="jamBangun" class="form-control" required>
+                                <input type="time" id="jamBangun" class="form-control" step="60" required>
                             </div>
                         </div>
 
@@ -106,29 +106,32 @@
         </div>
     </div>
 
-    <script src="js/script.js"></script>
     <script>
-        // Fungsi mendengarkan perubahan jam untuk menghitung kualitas secara real-time di form
         const inputJamTidur = document.getElementById("jamTidur");
         const inputJamBangun = document.getElementById("jamBangun");
         const inputKualitas = document.getElementById("kualitas");
 
         function hitungKualitasOtomatis() {
             if (inputJamTidur.value && inputJamBangun.value) {
-                // Memanfaatkan fungsi hitungDurasi yang ada di script.js
-                const durasi = hitungDurasi(inputJamTidur.value, inputJamBangun.value);
-                const totalJam = durasi.totalMenit / 60;
+                // Logika pemisahan waktu langsung mandiri di form
+                const [hTidur, mTidur] = inputJamTidur.value.split(':').map(Number);
+                const [hBangun, mBangun] = inputJamBangun.value.split(':').map(Number);
 
+                let menitTidur = hTidur * 60 + mTidur;
+                let menitBangun = hBangun * 60 + mBangun;
+
+                if (menitBangun < menitTidur) {
+                    menitBangun += 24 * 60; // Mengatasi kondisi lewat tengah malam
+                }
+
+                const totalJam = (menitBangun - menitTidur) / 60;
                 let skorKualitas = 0;
 
-                // Rumus standar tidur ideal (7-8 jam = 100%)
                 if (totalJam >= 7 && totalJam <= 8.5) {
                     skorKualitas = 100;
                 } else if (totalJam > 8.5) {
-                    // Terlalu banyak tidur menurunkan kesegaran tubuh
                     skorKualitas = Math.max(60, Math.round(100 - (totalJam - 8.5) * 12));
                 } else {
-                    // Kurang tidur menurunkan kualitas secara linear
                     skorKualitas = Math.max(40, Math.round((totalJam / 7) * 100));
                 }
 
@@ -139,6 +142,8 @@
         inputJamTidur.addEventListener("change", hitungKualitasOtomatis);
         inputJamBangun.addEventListener("change", hitungKualitasOtomatis);
     </script>
+
+    <script src="js/script.js"></script>
 </body>
 
 </html>

@@ -45,7 +45,6 @@ function simpanDataTidur(event) {
 
     const kualitasValue = document.getElementById("kualitas").value;
 
-    // Amankan jika user klik submit sebelum jam tidur & bangun terisi
     if (!kualitasValue || kualitasValue === "") {
         alert("Silakan isi Jam Mulai Tidur dan Jam Bangun terlebih dahulu agar kualitas terhitung!");
         return;
@@ -59,18 +58,12 @@ function simpanDataTidur(event) {
         catatan: document.getElementById("catatan").value
     };
 
-    const user =
-    localStorage.getItem("somnioUser");
+    const user = localStorage.getItem("somnioUser");
 
-    let riwayat = JSON.parse(
-    localStorage.getItem(`sleepData_${user}`)
-    ) || [];
+    let riwayat = JSON.parse(localStorage.getItem(`sleepData_${user}`)) || [];
     riwayat.push(data);
 
-    localStorage.setItem(
-    `sleepData_${user}`,
-    JSON.stringify(riwayat)
-    );
+    localStorage.setItem(`sleepData_${user}`, JSON.stringify(riwayat));
     alert("Data berhasil disimpan");
 
     window.location.href = "history.html";
@@ -80,14 +73,8 @@ function simpanDataTidur(event) {
    AMBIL DATA TIDUR
 ========================= */
 function ambilDataTidur() {
-
-    const user =
-    localStorage.getItem("somnioUser");
-
-    return JSON.parse(
-        localStorage.getItem(`sleepData_${user}`)
-    ) || [];
-
+    const user = localStorage.getItem("somnioUser");
+    return JSON.parse(localStorage.getItem(`sleepData_${user}`)) || [];
 }
 
 /* =========================
@@ -95,11 +82,8 @@ function ambilDataTidur() {
 ========================= */
 function resetDataTidur() {
     if (confirm("Hapus seluruh data tidur?")) {
-        const user =
-        localStorage.getItem("somnioUser");
-        localStorage.removeItem(
-        `sleepData_${user}`
-        );
+        const user = localStorage.getItem("somnioUser");
+        localStorage.removeItem(`sleepData_${user}`);
         alert("Data berhasil dihapus");
         location.reload();
     }
@@ -115,12 +99,8 @@ function simpanReminder(event) {
         sleepTime: document.getElementById("sleepTime").value
     };
 
-    const user =
-    localStorage.getItem("somnioUser");
-    localStorage.setItem(
-    `reminder_${user}`,
-    JSON.stringify(data)
-    );
+    const user = localStorage.getItem("somnioUser");
+    localStorage.setItem(`reminder_${user}`, JSON.stringify(data));
     alert("Pengingat berhasil disimpan");
     location.reload();
 }
@@ -129,14 +109,8 @@ function simpanReminder(event) {
    TAMPILKAN PENGINGAT
 ========================= */
 function tampilkanReminder() {
-    const user =
-    localStorage.getItem("somnioUser");
-    const reminder =
-    JSON.parse(
-    localStorage.getItem(
-    `reminder_${user}`
-    )
-    );
+    const user = localStorage.getItem("somnioUser");
+    const reminder = JSON.parse(localStorage.getItem(`reminder_${user}`));
     const target = document.getElementById("savedReminder");
 
     if (target && reminder) {
@@ -189,7 +163,6 @@ function renderDashboardDinamis() {
     const pencapaianText = document.getElementById("pencapaianText");
     const ctx = document.getElementById("sleepChart");
 
-    // KONDISI 1: JIKA DATA INPUT MASIH KOSONG
     if (data.length === 0) {
         if(elDurasi) elDurasi.innerText = "-";
         if(elKualitas) elKualitas.innerText = "-";
@@ -211,7 +184,6 @@ function renderDashboardDinamis() {
         return; 
     }
 
-    // KONDISI 2: JIKA SUDAH ADA DATA INPUT (HITUNG MATEMATIKA)
     let totalMenit = 0;
     let totalKualitas = 0;
 
@@ -226,13 +198,11 @@ function renderDashboardDinamis() {
     const avgMenit = Math.round(rataMenit % 60);
     const avgKualitas = Math.round(totalKualitas / data.length);
 
-    // Render Nilai Angka ke Dashboard
     if(elDurasi) elDurasi.innerText = `${avgJam}h ${avgMenit}m`;
     if(elKualitas) elKualitas.innerText = `${avgKualitas}%`;
     if(elTepatWaktu) elTepatWaktu.innerText = `${data.length} Hari`; 
     if(elProduktivitas) elProduktivitas.innerText = `${Math.min(avgKualitas - 5, 100)}%`; 
 
-    // Render Sub-Teks Status Keterangan Card
     if(subDurasi) subDurasi.innerText = "Rata-rata tidur";
     if(subKualitas) {
         subKualitas.innerText = avgKualitas >= 85 ? "Baik" : (avgKualitas >= 70 ? "Cukup" : "Kurang");
@@ -243,11 +213,9 @@ function renderDashboardDinamis() {
         subProduktivitas.className = avgKualitas >= 75 ? "text-primary mb-0" : "text-danger mb-0";
     }
 
-    // Update Panel Info Bawah
     if(statMingguanText) statMingguanText.innerText = `Rata-rata kualitas tidur Anda saat ini adalah ${avgKualitas}%.`;
     if(pencapaianText) pencapaianText.innerText = `🔥 Anda telah mencatat riwayat tidur selama ${data.length} hari teratur.`;
 
-    // PROSES GRAFIK DINAMIS PERMANEN (SENIN - MINGGU)
     if (ctx) {
         const labelsGrafik = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
         const dataKualitasGrafik = [null, null, null, null, null, null, null];
@@ -295,13 +263,14 @@ function renderDashboardDinamis() {
     }
 }
 
-// JALANKAN OTOMATIS SAAT DOM SELESAI DI-LOAD
+/* =========================
+   JALANKAN OTOMATIS SAAT DOM SELESAI DI-LOAD
+========================= */
 document.addEventListener("DOMContentLoaded", () => {
     tampilkanUser();
     renderDashboardDinamis();
     tampilkanReminder();
 
-    // Pastikan event listener form submit terpasang dengan aman
     const formTidur = document.getElementById("sleepForm");
     if (formTidur) {
         formTidur.addEventListener("submit", simpanDataTidur);
