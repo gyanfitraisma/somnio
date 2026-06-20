@@ -14,15 +14,17 @@
 <style>
 
 body{
-    background:#f5f7fb;
+    background:#f5f7fb; /* Mengatur warna latar belakang halaman dashboard */
 }
 
+/* Mengatur tata letak dan pembatas komponen sidebar di sebelah kiri */
 .sidebar{
     min-height:100vh;
     background:white;
     border-right:1px solid #ddd;
 }
 
+/* Mengatur tampilan komponen logo aplikasi di dalam sidebar */
 .logo{
     font-size:24px;
     font-weight:bold;
@@ -30,6 +32,7 @@ body{
     border-bottom:1px solid #eee;
 }
 
+/* Mengatur gaya menu link navigasi di dalam komponen sidebar */
 .sidebar .nav-link{
     color:#444;
     padding:12px 18px;
@@ -37,16 +40,18 @@ body{
     border-radius:10px;
 }
 
+/* Memberikan warna latar belakang penanda biru pada menu navigasi yang sedang aktif */
 .sidebar .active{
     background:#0d6efd;
     color:white !important;
 }
 
+/* Mengatur bentuk visual kartu penampung konten (box-panel) */
 .card-box{
     background:white;
     border:none;
     border-radius:15px;
-    box-shadow:0 3px 15px rgba(0,0,0,.08);
+    box-shadow:0 3px 15px rgba(0,0,0,.08); /* Memberikan bayangan halus di sekeliling kartu */
 }
 
 </style>
@@ -58,8 +63,6 @@ body{
 <div class="container-fluid">
 
 <div class="row">
-
-<!-- SIDEBAR -->
 
 <div class="col-lg-2 sidebar p-0">
 
@@ -86,8 +89,6 @@ body{
 </ul>
 
 </div>
-
-<!-- CONTENT -->
 
 <div class="col-lg-10 p-4">
 
@@ -163,9 +164,11 @@ Logout
 
 <script>
 
+// Otomatis menampilkan nama user yang sedang aktif ke dalam input text saat halaman dimuat
 document.getElementById("username").value =
 localStorage.getItem("somnioUser") || "";
 
+// FUNGSI: Menyimpan perubahan nama profil dan kata sandi baru ke Web Storage
 function simpanPengaturan(){
 
 const username =
@@ -174,48 +177,58 @@ document.getElementById("username").value;
 const password =
 document.getElementById("password").value;
 
+// Memperbarui nama pengguna aktif di penyimpanan lokal
 localStorage.setItem(
 "somnioUser",
 username
 );
 
+// Validasi kondisional: Hanya simpan kata sandi baru jika kolom input tidak kosong
 if(password !== ""){
 
-localStorage.setItem(
-"somnioPassword",
-password
-);
+    localStorage.setItem(
+    "somnioPassword",
+    password
+    );
 
 }
 
+// Menampilkan pesan pop-up konfirmasi keberhasilan aksi simpan
 alert(
 "Perubahan berhasil disimpan"
 );
 
 }
 
+// FUNGSI: Mengosongkan data riwayat tidur yang tersimpan pada memori browser
 function resetData(){
 
+// Menampilkan kotak dialog konfirmasi (Yes/No) sebelum eksekusi hapus dilakukan
 if(confirm("Hapus seluruh data tidur?")){
 
-localStorage.removeItem(
-"sleepData"
-);
+    // Menghapus item key data tidur dari penyimpanan lokal browser
+    localStorage.removeItem(
+    "sleepData"
+    );
 
-alert(
-"Data berhasil dihapus"
-);
+    // Notifikasi sukses setelah data dibersihkan
+    alert(
+    "Data berhasil dihapus"
+    );
 
 }
 
 }
 
+// FUNGSI: Mengakhiri sesi pengguna saat ini dan keluar dari aplikasi
 function logout(){
 
+// Menghapus token string nama pengguna untuk merestart status login
 localStorage.removeItem(
 "somnioUser"
 );
 
+// Mengalihkan secara otomatis ke halaman autentikasi login utama
 window.location.href =
 "login.html";
 

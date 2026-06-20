@@ -11,11 +11,12 @@
     <style>
         body {
             background: #f5f7fb;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Mencegah munculnya scrollbar horizontal */
         }
 
+        /* Pengaturan visual untuk kolom menu samping (Sidebar) */
         .sidebar {
-            min-height: 100vh;
+            min-height: 100vh; /* Memastikan sidebar memenuhi tinggi layar penuh */
             background: #ffffff;
             border-right: 1px solid #e5e7eb;
         }
@@ -27,35 +28,40 @@
             border-bottom: 1px solid #eee;
         }
 
+        /* Styling untuk link navigasi di dalam sidebar */
         .sidebar .nav-link {
             color: #444;
             padding: 12px 18px;
             margin: 5px 10px;
             border-radius: 10px;
-            transition: .3s;
+            transition: .3s; /* Efek transisi halus saat pointer melintas */
         }
 
         .sidebar .nav-link:hover {
             background: #eef4ff;
         }
 
+        /* Penanda visual untuk halaman navigasi yang sedang aktif */
         .sidebar .active {
             background: #0d6efd;
             color: white !important;
         }
 
+        /* Bar bagian atas untuk judul halaman dan nama pengguna */
         .topbar {
             background: white;
             border-bottom: 1px solid #ddd;
             padding: 15px 25px;
         }
 
+        /* Kartu kontainer penampil ringkasan angka statistik */
         .stat-card {
             border: none;
             border-radius: 15px;
             box-shadow: 0 3px 15px rgba(0, 0, 0, .08);
         }
 
+        /* Panel utama pembungkus grafik dan rekomendasi konten */
         .panel {
             background: white;
             border-radius: 15px;
@@ -199,17 +205,25 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <script>
+        // Membaca kunci session nama pengguna dari LocalStorage browser
         const nama = localStorage.getItem("somnioUser");
+        
+        // SISTEM PROTEKSI: Jika user belum melakukan login, tendang balik ke hal login.html
         if (!nama) {
             window.location.href = "login.html";
         }
+        // Jika lolos proteksi, suntikkan teks nama ke elemen identitas topbar
         document.getElementById("namaUser").innerHTML = nama;
 
+        // Fungsi kontrol untuk mematikan sesi login
         function logout() {
-            localStorage.removeItem("somnioUser");
-            window.location.href = "login.html";
+            localStorage.removeItem("somnioUser"); // Bersihkan session key nama
+            window.location.href = "login.html"; // Tendang ke gerbang log in
         }
+        
+        // Memuat record objek preferensi alarm pengingat khusus miliki user aktif
         const reminder =
         JSON.parse(
         localStorage.getItem(
@@ -217,6 +231,7 @@
         )
         );
 
+        // Jika data alarm eksis dan komponen HTML target sedia, sinkronisasikan teks jamnya
         if(
         reminder &&
         document.getElementById("dashboardReminderTime")

@@ -14,15 +14,17 @@
 <style>
 
 body{
-    background:#f5f7fb;
+    background:#f5f7fb; /* Mengatur warna latar belakang halaman dashboard */
 }
 
+/* Mengatur tata letak dan pembatas komponen sidebar di sebelah kiri */
 .sidebar{
     min-height:100vh;
     background:white;
     border-right:1px solid #ddd;
 }
 
+/* Mengatur tampilan komponen logo aplikasi di dalam sidebar */
 .logo{
     font-size:24px;
     font-weight:bold;
@@ -30,6 +32,7 @@ body{
     border-bottom:1px solid #eee;
 }
 
+/* Mengatur gaya menu link navigasi di dalam komponen sidebar */
 .sidebar .nav-link{
     color:#444;
     padding:12px 18px;
@@ -37,16 +40,18 @@ body{
     border-radius:10px;
 }
 
+/* Memberikan warna latar belakang penanda biru pada menu navigasi yang sedang aktif */
 .sidebar .active{
     background:#0d6efd;
     color:white !important;
 }
 
+/* Mengatur bentuk visual kartu penampung data (box-panel) */
 .card-box{
     background:white;
     border:none;
     border-radius:15px;
-    box-shadow:0 3px 15px rgba(0,0,0,.08);
+    box-shadow:0 3px 15px rgba(0,0,0,.08); /* Memberikan bayangan halus di sekeliling kartu */
 }
 
 </style>
@@ -58,8 +63,6 @@ body{
 <div class="container-fluid">
 
 <div class="row">
-
-<!-- SIDEBAR -->
 
 <div class="col-lg-2 sidebar p-0">
 
@@ -114,8 +117,6 @@ body{
 </ul>
 
 </div>
-
-<!-- CONTENT -->
 
 <div class="col-lg-10 p-4">
 
@@ -189,19 +190,24 @@ Grafik Kualitas Tidur
 
 <script>
 
+// Mendapatkan identitas pengguna aktif dari penyimpanan lokal browser
 const user =
 localStorage.getItem("somnioUser");
 
+// Memuat array data riwayat tidur spesifik milik user tersebut (jika kosong, buat array baru `[]`)
 const sleepData =
 JSON.parse(
 localStorage.getItem(`sleepData_${user}`)
 ) || [];
 
+// 1. HITUNG TOTAL DATA: Mencetak total panjang index array ke dalam elemen HTML
 document.getElementById("totalData")
 .innerHTML = sleepData.length;
 
+// 2. HITUNG RATA-RATA KUALITAS TIDUR
 let totalQuality = 0;
 
+// Melakukan looping untuk mengakumulasikan seluruh nilai kualitas tidur yang ada
 sleepData.forEach(item => {
 
 totalQuality +=
@@ -211,48 +217,51 @@ Number(item.kualitas);
 
 let avgQuality = 0;
 
+// Validasi pembagian agar tidak menghasilkan error NaN jika array kosong
 if(sleepData.length > 0){
 
 avgQuality =
 (
 totalQuality /
 sleepData.length
-).toFixed(1);
+).toFixed(1); // Mengunci angka desimal hanya 1 angka di belakang koma (contoh: 85.5)
 
 }
 
+// Mencetak hasil kalkulasi rata-rata kualitas ke elemen HTML terkait
 document.getElementById("avgQuality")
 .innerHTML =
 avgQuality + "%";
 
-/* HITUNG DURASI */
+/* 3. HITUNG RATA-RATA DURASI TIDUR */
 
 let totalMinutes = 0;
 
+// Melakukan iterasi untuk menghitung selisih waktu tidur per entri data
 sleepData.forEach(item => {
 
+// Memisahkan string waktu "HH:MM" menjadi komponen Jam dan Menit terpisah
 const tidur =
 item.jamTidur.split(":");
 
 const bangun =
 item.jamBangun.split(":");
 
+// Mengonversi masing-masing komponen waktu menjadi satuan menit total
 let start =
-(Number(tidur[0]) * 60)
-+
-Number(tidur[1]);
+(Number(tidur[0]) * 60) + Number(tidur[1]);
 
 let end =
-(Number(bangun[0]) * 60)
-+
-Number(bangun[1]);
+(Number(bangun[0]) * 60) + Number(bangun[1]);
 
+// Logika Kondisional: Menyesuaikan waktu jika jam bangun melewati tengah malam (lewat pukul 00:00)
 if(end < start){
 
-end += 24 * 60;
+end += 24 * 60; // Ditambahkan durasi 24 jam dalam format menit
 
 }
 
+// Mengakumulasikan selisih menit tidur harian ke total menit keseluruhan
 totalMinutes +=
 (end - start);
 
@@ -260,29 +269,31 @@ totalMinutes +=
 
 let avgMinutes = 0;
 
+// Memastikan pembagian durasi rata-rata hanya berjalan jika data tidak kosong
 if(sleepData.length > 0){
 
 avgMinutes =
 Math.round(
 totalMinutes /
 sleepData.length
-);
+); // Melakukan pembulatan bilangan bulat terdekat
 
 }
 
+// Mengonversi total menit rata-rata kembali ke format desimal jam (dibagi 60) lalu dicetak
 document.getElementById("avgDuration")
 .innerHTML =
-(avgMinutes/60).toFixed(1)
-+
-" Jam";
+(avgMinutes/60).toFixed(1) + " Jam";
 
-/* GRAFIK */
+/* 4. RENDER VISUALISASI GRAFIK BAR CHART */
 
+// Mengekstrak tanggal entri menjadi array baru sebagai label sumbu X grafik
 const labels =
 sleepData.map(
 item => item.tanggal
 );
 
+// Mengekstrak skor kualitas menjadi array baru sebagai nilai sumbu Y grafik
 const kualitas =
 sleepData.map(
 item => item.kualitas
@@ -291,6 +302,7 @@ item => item.kualitas
 const ctx =
 document.getElementById("statsChart");
 
+// Kondisional Grafik: Jika data kosong, tampilkan pesan peringatan Bootstrap alert
 if(sleepData.length === 0){
 
 ctx.parentElement.innerHTML +=
@@ -302,28 +314,29 @@ Belum ada data tidur.
 
 }else{
 
+// Inisialisasi pembuatan objek grafik batang menggunakan pustaka Chart.js
 new Chart(ctx, {
 
-type:'bar',
+type:'bar', // Menentukan jenis grafik berupa grafik batang (Bar Chart)
 
 data:{
 
-labels:labels,
+labels:labels, // Memasukkan array label tanggal ke sumbu horisontal
 
 datasets:[{
 
-label:'Kualitas Tidur (%)',
+label:'Kualitas Tidur (%)', // Judul keterangan dataset grafik
 
-data:kualitas,
+data:kualitas, // Memasukkan array skor kualitas ke tinggi batang
 
-borderWidth:1
+borderWidth:1 // Mengatur ketebalan garis tepi batang grafik
 
 }]
 
 },
 
 options:{
-responsive:true
+responsive:true // Memastikan dimensi grafik dapat menyesuaikan lebar layar secara dinamis
 }
 
 });

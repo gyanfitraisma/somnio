@@ -10,15 +10,17 @@
 
     <style>
         body {
-            background: #f5f7fb;
+            background: #f5f7fb; /* Mengatur warna latar belakang halaman dashboard */
         }
 
+        /* Mengatur tata letak dan pembatas komponen sidebar di sebelah kiri */
         .sidebar {
             min-height: 100vh;
             background: white;
             border-right: 1px solid #ddd;
         }
 
+        /* Mengatur tampilan komponen logo aplikasi di dalam sidebar */
         .logo {
             font-size: 24px;
             font-weight: bold;
@@ -26,6 +28,7 @@
             border-bottom: 1px solid #eee;
         }
 
+        /* Mengatur gaya menu link navigasi di dalam komponen sidebar */
         .sidebar .nav-link {
             color: #444;
             padding: 12px 18px;
@@ -33,16 +36,18 @@
             border-radius: 10px;
         }
 
+        /* Memberikan warna latar belakang penanda biru pada menu navigasi yang sedang aktif */
         .sidebar .active {
             background: #0d6efd;
             color: white !important;
         }
 
+        /* Mengatur bentuk visual kartu penampung formulir (form-panel) */
         .card-form {
             background: white;
             border: none;
             border-radius: 15px;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, .08);
+            box-shadow: 0 3px 15px rgba(0, 0, 0, .08); /* Memberikan bayangan halus di sekeliling kartu */
         }
     </style>
 </head>
@@ -107,38 +112,51 @@
     </div>
 
     <script>
+        // Mendapatkan referensi elemen-elemen input untuk manipulasi nilai data
         const inputJamTidur = document.getElementById("jamTidur");
         const inputJamBangun = document.getElementById("jamBangun");
         const inputKualitas = document.getElementById("kualitas");
 
+        // FUNGSI: Menghitung skor kualitas tidur secara real-time berdasarkan input waktu
         function hitungKualitasOtomatis() {
+            // Memastikan kedua input jam telah terisi sebelum kalkulasi dijalankan
             if (inputJamTidur.value && inputJamBangun.value) {
-                // Logika pemisahan waktu langsung mandiri di form
+                
+                // Memisahkan format string "HH:MM" menjadi angka numerik Jam dan Menit tersendiri
                 const [hTidur, mTidur] = inputJamTidur.value.split(':').map(Number);
                 const [hBangun, mBangun] = inputJamBangun.value.split(':').map(Number);
 
+                // Mengonversi total waktu dari bentuk jam ke satuan menit total
                 let menitTidur = hTidur * 60 + mTidur;
                 let menitBangun = hBangun * 60 + mBangun;
 
+                // Algoritma Penyeimbang: Jika waktu bangun lebih kecil, berarti tidur melewati tengah malam (hari berikutnya)
                 if (menitBangun < menitTidur) {
-                    menitBangun += 24 * 60; // Mengatasi kondisi lewat tengah malam
+                    menitBangun += 24 * 60; // Menambahkan durasi total 24 jam dalam satuan menit
                 }
 
+                // Menghitung selisih menit lalu dikonversi kembali ke format desimal satuan jam
                 const totalJam = (menitBangun - menitTidur) / 60;
                 let skorKualitas = 0;
 
+                // SISTEM PENILAIAN LOGIS:
+                // 1. Kondisi Ideal: Durasi tidur berkisar antara 7 sampai 8.5 jam diberi nilai sempurna 100%
                 if (totalJam >= 7 && totalJam <= 8.5) {
                     skorKualitas = 100;
+                // 2. Kondisi Over-sleep: Tidur lebih dari 8.5 jam akan dikurangi nilainya secara bertahap (minimal skor 60%)
                 } else if (totalJam > 8.5) {
                     skorKualitas = Math.max(60, Math.round(100 - (totalJam - 8.5) * 12));
+                // 3. Kondisi Lack-of-sleep: Kurang dari 7 jam akan mendapatkan nilai proporsional (minimal skor 40%)
                 } else {
                     skorKualitas = Math.max(40, Math.round((totalJam / 7) * 100));
                 }
 
+                // Memasukkan hasil kalkulasi skor akhir ke dalam kolom input kualitas tidur
                 inputKualitas.value = skorKualitas;
             }
         }
 
+        // Event Listener: Jalankan perhitungan otomatis setiap kali isi kolom input jam berubah
         inputJamTidur.addEventListener("change", hitungKualitasOtomatis);
         inputJamBangun.addEventListener("change", hitungKualitasOtomatis);
     </script>

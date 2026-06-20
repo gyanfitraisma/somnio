@@ -13,12 +13,12 @@
     
     <style>
         html {
-            scroll-behavior: smooth;
+            scroll-behavior: smooth; /* Memberikan efek transisi halus saat berpindah antar section/bagian */
             /* Mengatur jarak stop scroll agar tidak tertutup sticky navbar */
             scroll-padding-top: 80px; 
         }
         body {
-            padding-bottom: 80px; 
+            padding-bottom: 80px; /* Memberikan ruang di bawah agar konten tidak tertutup oleh fixed-bottom footer */
         }
     </style>
 </head>
@@ -46,7 +46,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#tentang">Tentang</a>
                     </li>
-                    <!-- Menu Blog berupa Dropdown yang mengarah ke bagian bawah Beranda -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Blog
@@ -186,7 +185,6 @@
         </div>
     </section>
 
-    <!-- SECTION FAQ (Diposisikan di bawah Blog) -->
     <section id="faq" class="bg-light py-5">
         <div class="container" style="max-width: 900px;">
             <div class="text-center mb-5">
@@ -196,7 +194,6 @@
             </div>
             
             <div class="accordion" id="accordionFAQ">
-                <!-- Pertanyaan 1 -->
                 <div class="accordion-item border-0 shadow-sm mb-3 rounded">
                     <h2 class="accordion-header" id="headingOne">
                         <button class="accordion-button fw-bold rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -210,7 +207,6 @@
                     </div>
                 </div>
 
-                <!-- Pertanyaan 2 -->
                 <div class="accordion-item border-0 shadow-sm mb-3 rounded">
                     <h2 class="accordion-header" id="headingTwo">
                         <button class="accordion-button collapsed fw-bold rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -224,7 +220,6 @@
                     </div>
                 </div>
 
-                <!-- Pertanyaan 3 -->
                 <div class="accordion-item border-0 shadow-sm mb-3 rounded">
                     <h2 class="accordion-header" id="headingThree">
                         <button class="accordion-button collapsed fw-bold rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -238,7 +233,6 @@
                     </div>
                 </div>
 
-                <!-- Pertanyaan 4 -->
                 <div class="accordion-item border-0 shadow-sm mb-3 rounded">
                     <h2 class="accordion-header" id="headingFour">
                         <button class="accordion-button collapsed fw-bold rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
@@ -255,7 +249,6 @@
         </div>
     </section>
 
-    <!-- SECTION KONTAK (Diposisikan di bawah FAQ) -->
     <section id="kontak" class="container py-5">
         <div class="text-center mb-5">
             <span class="badge bg-primary mb-2">Hubungi Kami</span>
@@ -264,7 +257,6 @@
         </div>
 
         <div class="row g-4 justify-content-center">
-            <!-- Info Kontak Tambahan -->
             <div class="col-lg-5 col-md-6">
                 <div class="bg-primary text-white p-4 rounded shadow h-100 d-flex flex-column justify-content-between">
                     <div>
@@ -285,7 +277,6 @@
                 </div>
             </div>
 
-            <!-- Formulir Kontak -->
             <div class="col-lg-6 col-md-6">
                 <div class="card border-0 shadow p-4 h-100">
                     <form>

@@ -6,29 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Somnio</title>
 
-    <!-- CSS External -->
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body {
-            background: #f4f6f9;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: #f4f6f9; /* Mengatur warna latar belakang halaman login */
+            min-height: 100vh;   /* Memastikan tinggi body minimal setinggi layar penuh */
+            display: flex;       /* Mengaktifkan flexbox untuk memposisikan komponen ke tengah */
+            justify-content: center; /* Memposisikan objek secara horizontal di tengah */
+            align-items: center;     /* Memposisikan objek secara vertikal di tengah */
         }
 
         .login-card {
-            width: 450px;
-            background: white;
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+            width: 450px;           /* Mengunci lebar kartu login */
+            background: white;       /* Warna latar belakang kartu login */
+            border-radius: 20px;     /* Membuat sudut kartu login melengkung halus */
+            padding: 35px;           /* Memberikan ruang dalam di sekeliling konten kartu */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08); /* Memberikan efek bayangan lembut di bawah kartu */
         }
 
         .logo {
-            font-size: 35px;
+            font-size: 35px; /* Mengatur ukuran teks atau emoji logo */
         }
     </style>
 </head>
@@ -36,14 +35,12 @@
 <body>
 
     <div class="login-card">
-        <!-- Header Card -->
         <div class="text-center mb-4">
             <div class="logo">🌙</div>
             <h2 class="fw-bold">SOMNIO</h2>
             <p class="text-muted">Smart Sleep Monitoring Platform</p>
         </div>
 
-        <!-- Form Login -->
         <form id="loginForm">
             <div class="mb-3">
                 <label class="form-label" for="username">Nama Pengguna</label>
@@ -58,31 +55,35 @@
             <button type="submit" class="btn btn-primary w-100">Masuk</button>
         </form>
 
-        <!-- Footer Card -->
         <div class="text-center mt-3">
             <a href="index.html" class="text-decoration-none"> Kembali ke Beranda</a>
         </div>
     </div>
 
-    <!-- JavaScript -->
     <script>
+        // Mencegah form agar tidak melakukan reload halaman saat dikirim (submit)
         document.getElementById("loginForm").addEventListener("submit", function(e) {
             e.preventDefault();
 
+            // Mengambil nilai input dari form login
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
+            // Validasi string untuk memastikan input Nama tidak kosong/hanya spasi
             if (username.trim() === "") {
                 alert("Nama tidak boleh kosong");
                 return;
             }
 
+            // Validasi string untuk memastikan input Password tidak kosong/hanya spasi
             if (password.trim() === "") {
                 alert("Password tidak boleh kosong");
                 return;
             }
 
+            // Menyimpan nama pengguna ke dalam session penyimpanan lokal browser (Web Storage)
             localStorage.setItem("somnioUser", username);
+            // Mengalihkan pengguna secara otomatis ke halaman dashboard utama
             window.location.href = "dashboard.html";
         });
     </script>

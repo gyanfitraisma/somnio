@@ -17,8 +17,9 @@ body{
     background:#f5f7fb;
 }
 
+/* Pengaturan visual untuk kolom menu samping (Sidebar) */
 .sidebar{
-    min-height:100vh;
+    min-height:100vh; /* Memastikan sidebar memenuhi tinggi layar penuh */
     background:white;
     border-right:1px solid #ddd;
 }
@@ -30,6 +31,7 @@ body{
     border-bottom:1px solid #eee;
 }
 
+/* Styling untuk link navigasi di dalam sidebar */
 .sidebar .nav-link{
     color:#444;
     padding:12px 18px;
@@ -37,11 +39,13 @@ body{
     border-radius:10px;
 }
 
+/* Penanda visual untuk halaman navigasi yang sedang aktif */
 .sidebar .active{
     background:#0d6efd;
     color:white !important;
 }
 
+/* Kotak putih latar belakang untuk tabel data */
 .card-box{
     background:white;
     border:none;
@@ -58,8 +62,6 @@ body{
 <div class="container-fluid">
 
 <div class="row">
-
-<!-- SIDEBAR -->
 
 <div class="col-lg-2 sidebar p-0">
 
@@ -115,8 +117,6 @@ body{
 
 </div>
 
-<!-- CONTENT -->
-
 <div class="col-lg-10 p-4">
 
 <h3 class="mb-4">
@@ -154,8 +154,6 @@ Riwayat Tidur
 </div>
 
 </div>
-
-<!-- MODAL -->
 
 <div
 class="modal fade"
@@ -219,9 +217,11 @@ data-bs-dismiss="modal">
 
 <script>
 
+// Mengambil identitas user aktif untuk mengambil database lokal yang sesuai
 const user =
 localStorage.getItem("somnioUser");
 
+// Mengambil array riwayat dari LocalStorage, jika belum ada setel sebagai array kosong []
 let dataTidur =
 JSON.parse(
 localStorage.getItem(`sleepData_${user}`)
@@ -230,12 +230,16 @@ localStorage.getItem(`sleepData_${user}`)
 const tbody =
 document.getElementById("tableBody");
 
+/* FUNGSI: MERENDER DATA TIDUR KE DALAM ELEMEN TABEL HTML */
 function tampilkanData(){
 
+// Membersihkan isi tabel terlebih dahulu agar tidak terjadi duplikasi data saat di-refresh
 tbody.innerHTML = "";
 
+// Melakukan perulangan untuk setiap baris data yang ada di dalam array riwayat
 dataTidur.forEach((item,index)=>{
 
+// Menyisipkan baris HTML baru secara dinamis ke dalam elemen <tbody>
 tbody.innerHTML += `
 
 <tr>
@@ -276,10 +280,13 @@ Hapus
 
 }
 
+/* FUNGSI: MEMBUKA MODAL DAN MENYUNTIKKAN DATA RINCIAN SESUAI INDEX */
 function lihatData(index){
 
+// Menangkap objek data tidur yang dipilih berdasarkan nomor index array-nya
 const item = dataTidur[index];
 
+// Mengisi konten teks element modal berdasarkan isi objek data riwayat tidur
 document.getElementById("mTanggal")
 .innerHTML = item.tanggal;
 
@@ -295,29 +302,36 @@ document.getElementById("mKualitas")
 document.getElementById("mCatatan")
 .innerHTML = item.catatan;
 
+// Melakukan instansiasi objek modal Bootstrap baru kemudian menampilkannya ke layar
 new bootstrap.Modal(
 document.getElementById("detailModal")
 ).show();
 
 }
 
+/* FUNGSI: MENGHAPUS DATA DARI ARRAY DAN MEMPERBARUI DATABASE LOKAL */
 function hapusData(index){
 
+// Memunculkan kotak konfirmasi sebelum proses penghapusan dilakukan
 if(confirm("Hapus data ini?")){
 
+// Menghapus data dari array berdasarkan index baris sebanyak 1 elemen
 dataTidur.splice(index,1);
 
+// Menyimpan kembali kondisi array terbaru ke LocalStorage dalam bentuk teks JSON
 localStorage.setItem(
 `sleepData_${user}`,
 JSON.stringify(dataTidur)
 );
 
+// Memuat ulang tampilan tabel di halaman agar sesuai dengan perubahan data terbaru
 tampilkanData();
 
 }
 
 }
 
+// Memanggil fungsi tampilkanData secara otomatis saat halaman pertama kali dibuka
 tampilkanData();
 
 </script>
